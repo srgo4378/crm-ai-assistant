@@ -4,6 +4,14 @@ import anthropic
 st.set_page_config(page_title="CRM AI Sales Assistant", page_icon="🤝", layout="centered")
 st.title("🤝 CRM AI Sales Assistant")
 st.write("Paste raw call notes → get a lead summary, tags, next step, and a follow-up email.")
+# Badges for Tags
+if "Tags:" in output:
+    tags_line = output.split("Tags:", 1)[1].split("\n", 1)[0]
+    tags_line = tags_line.replace("{", "").replace("}", "")
+    tags = [t.strip() for t in tags_line.split(",") if t.strip()]
+    if tags:
+        st.subheader("🏷️ Tags")
+        st.write(" ".join(f"`{t}`" for t in tags[:6]))
 
 # ---- Controls
 tone = st.selectbox("Email Tone", ["Professional", "Friendly", "Luxury"])
@@ -37,11 +45,13 @@ You are an AI Sales Assistant for a real-estate CRM (like Follow Up Boss).
 TASK: From the raw notes, produce EXACTLY four sections:
 
 1) Lead Summary — ≤3 short sentences, concrete details only.
-2) Tags — max 6 in this exact style: {{Buyer/Seller, City, 3-bed (or N-bed), Budget<###k, Neighborhood, Timeline=##-##mo}}.
-3) Next Step — ONE action + a due-by date within 3 business days (write the weekday, e.g., “by Friday”).
+2) Tags — max 6 using this exact style:
+   {Buyer/Seller, City, Beds (e.g., 2-bed), Neighborhood=..., Timeline=##-##mo, Preferred=Email/Text}
+   If City is obvious from the neighborhood, include City anyway (e.g., Denver).
+3) Next Step — ONE deliverable + due-by date within 3 business days (write the weekday) and the channel to use.
 4) Email Draft — include:
-   Subject: one clear line (≤60 chars)
-   Body: 4–5 short sentences, skimmable, 1 clear CTA with a day/time window. Tone: {tone}.
+   Subject: ≤60 chars
+   Body: 4–5 brief sentences, skimmable, one clear CTA with a day/time window. Tone: {tone}.
 
 RAW NOTES:
 {notes}
