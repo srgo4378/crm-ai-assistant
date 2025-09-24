@@ -4,14 +4,6 @@ import anthropic
 st.set_page_config(page_title="CRM AI Sales Assistant", page_icon="🤝", layout="centered")
 st.title("🤝 CRM AI Sales Assistant")
 st.write("Paste raw call notes → get a lead summary, tags, next step, and a follow-up email.")
-# Badges for Tags
-if "Tags:" in output:
-    tags_line = output.split("Tags:", 1)[1].split("\n", 1)[0]
-    tags_line = tags_line.replace("{", "").replace("}", "")
-    tags = [t.strip() for t in tags_line.split(",") if t.strip()]
-    if tags:
-        st.subheader("🏷️ Tags")
-        st.write(" ".join(f"`{t}`" for t in tags[:6]))
 
 # ---- Controls
 tone = st.selectbox("Email Tone", ["Professional", "Friendly", "Luxury"])
