@@ -42,7 +42,7 @@ Return the four sections clearly labeled.
 
     with st.spinner("Thinking..."):
         resp = client.messages.create(
-            model="claude-3-5-sonnet-latest",
+            model="claude-3-haiku-20240307",
             max_tokens=700,
             temperature=0.3,
             messages=[{"role": "user", "content": prompt}],
