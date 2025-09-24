@@ -1,32 +1,31 @@
 import streamlit as st
 from openai import OpenAI
 
+st.set_page_config(page_title="CRM AI Sales Assistant", page_icon="🤝")
 st.title("🤝 CRM AI Sales Assistant")
-st.write("Paste your raw call notes below and get a summary, tags, next step, and a follow-up email.")
+st.write("Paste raw call notes → get a lead summary, tags, next step, and a follow-up email.")
 
-# Input box
-notes = st.text_area("Call notes:", height=200, placeholder="E.g., Spoke with Sarah J. Wants a 3-bed in Denver under $750k...")
+# Text input
+notes = st.text_area(
+    "Call notes:",
+    height=200,
+    placeholder="E.g., Spoke with Sarah J. Wants a 3-bed in Denver under $750k. Mentioned Compass. Open house Sat. Prefers email."
+)
 
 if st.button("Generate"):
     if not notes.strip():
         st.warning("Please enter some call notes first.")
-    else:
+        st.stop()
+
+    # Make sure your key is in Streamlit Secrets: OPENAI_API_KEY = sk-...
+    try:
         client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    except Exception:
+        st.error("Missing OPENAI_API_KEY in Streamlit Secrets.")
+        st.stop()
 
-        prompt = f"""
-        You are an AI Sales Assistant for real estate CRM Follow Up Boss.
-        Input: {notes}
-
-        Output:
-        - Lead Summary (2-3 sentences)
-        - Tags (3–5 tags in curly braces like {{Buyer, Denver, 3-bed, Budget<750k}})
-        - Next Step (1 clear action with timeframe)
-        - Follow-up Email Draft (5–6 sentences, professional and friendly)
-        """
-
-        with st.spinner("Thinking..."):
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role":"user","content":prompt}],
-                temperature=0.3,
-                max_tokens=500
+    # Plain string (not an f-string) to avoid brace/quote issues
+    prompt = (
+        "You are an AI Sales Assistant for a real-estate CRM (like Follow Up Boss).\n\n"
+        "TASK:\n"
+        "Given the raw call notes below, produce:\
