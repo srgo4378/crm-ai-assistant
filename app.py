@@ -38,7 +38,7 @@ TASK: From the raw notes, produce EXACTLY four sections:
 
 1) Lead Summary — ≤3 short sentences, concrete details only.
 2) Tags — max 6 using this exact style:
-   {Buyer/Seller, City, Beds (e.g., 2-bed), Neighborhood=..., Timeline=##-##mo, Preferred=Email/Text}
+   {{Buyer/Seller, City, Beds (e.g., 2-bed), Neighborhood=..., Timeline=##-##mo, Preferred=Email/Text}}
    If City is obvious from the neighborhood, include City anyway (e.g., Denver).
 3) Next Step — ONE deliverable + due-by date within 3 business days (write the weekday) and the channel to use.
 4) Email Draft — include:
