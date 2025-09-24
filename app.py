@@ -28,31 +28,18 @@ if st.button("Generate"):
         st.stop()
 
     # Prompt (triple quotes, no weird spacing)
-    prompt = f"""
+   prompt = f"""
 You are an AI Sales Assistant for a real-estate CRM (like Follow Up Boss).
 
-TASK:
-Produce exactly four sections from the raw call notes below.
+TASK: From the raw notes, produce EXACTLY four sections with these rules:
 
-1) Lead Summary: <= 3 sentences, concise and actionable.
-2) Tags: max 6 tags, format like {{Buyer/Seller, City, Beds, Budget, AreaOrNeighborhood, Timeline=...}}.
-3) Next Step: one clear action + due date within 3 business days.
-4) Email Draft: include a subject line and 4–5 sentence body, clear CTA with a day/time window. Tone: {tone}.
+1) Lead Summary — ≤3 short sentences, concrete details only.
+2) Tags — max 6 in this exact style: {{Buyer/Seller, City, Beds, Budget<###k, Neighborhood, Timeline=##-##mo}}.
+3) Next Step — one action + a due-by date within 3 business days (e.g., “Send 5 listings + lender intro by Wed, Oct 1”).
+4) Email Draft — include:
+   - Subject: one clear line (≤60 chars)
+   - Body: 4–5 short sentences, skimmable, 1 concrete CTA with day/time window, no fluff.
 
 RAW NOTES:
 {notes}
 """
-
-    with st.spinner("Thinking..."):
-        resp = client.messages.create(
-            model="claude-3-haiku-20240307",   # ✅ haiku works for all accounts
-            max_tokens=500,
-            temperature=0.3,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        output = resp.content[0].text
-
-    st.subheader("📌 AI Output")
-    st.write(output)
-
-st.caption("Prototype demo. In a full product, these outputs would auto-fill CRM fields and schedule the next task.")
